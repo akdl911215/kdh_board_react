@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ListAPI } from "../../api/BoardApi";
+import { useNavigate } from "react-router-dom";
 
 const List = () => {
+  const navigate = useNavigate();
   const [list, setList] = useState([]);
 
   useEffect(() => {
@@ -14,6 +16,10 @@ const List = () => {
       .catch((err) => console.error(err));
   }, []);
   useEffect(() => console.log(list), [list]);
+
+  const modifyButton = (boardId) => {
+    navigate(`/read/${boardId}`);
+  };
 
   return (
     <>
@@ -36,19 +42,19 @@ const List = () => {
                   onChange={() => console.log("onChange")}
                 />
                 <div
-                  onClick={() => console.log("click")}
+                  onClick={() => modifyButton(el.id)}
                   style={{ paddingLeft: 20, paddingRight: 20 }}
                 >
                   {el.id}
                 </div>
                 <div
-                  onClick={() => console.log("click")}
+                  onClick={() => modifyButton(el.id)}
                   style={{ paddingLeft: 20, paddingRight: 20 }}
                 >
                   {el.title}
                 </div>
                 <div
-                  onClick={() => console.log("click")}
+                  onClick={() => modifyButton(el.id)}
                   style={{ paddingLeft: 20, paddingRight: 20 }}
                 >
                   {el.writerName}
