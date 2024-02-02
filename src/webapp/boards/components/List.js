@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ListAPI } from "../../api/BoardApi";
+import { DeleteAPI, ListAPI } from "../../api/BoardApi";
 import { useNavigate } from "react-router-dom";
 
 const List = () => {
   const navigate = useNavigate();
   const [list, setList] = useState([]);
+  const [boardId, setBoardId] = useState(0);
 
   useEffect(() => {
     ListAPI(1, 10)
@@ -19,6 +20,21 @@ const List = () => {
 
   const modifyButton = (boardId) => {
     navigate(`/read/${boardId}`);
+  };
+
+  const registerButton = () => {
+    navigate("/register");
+  };
+
+  const deleteButton = () => {
+    DeleteAPI(boardId)
+      .then((res) => {
+        const response = res?.data;
+        if (response) {
+          window.location.reload();
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -37,10 +53,7 @@ const List = () => {
             </div>
             {list?.map((el) => (
               <div style={{ display: "flex" }} key={el.id}>
-                <input
-                  type="checkbox"
-                  onChange={() => console.log("onChange")}
-                />
+                <input type="checkbox" onChange={() => setBoardId(el.id)} />
                 <div
                   onClick={() => modifyButton(el.id)}
                   style={{ paddingLeft: 20, paddingRight: 20 }}
@@ -64,8 +77,8 @@ const List = () => {
           </div>
         </div>
         <div>
-          <button>작성</button>
-          <button>삭제</button>
+          <button onClick={registerButton}>작성</button>
+          <button onClick={deleteButton}>삭제</button>
         </div>
       </div>
     </>
